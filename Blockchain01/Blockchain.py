@@ -1,7 +1,7 @@
 import hashlib
 import json
 from time import time
-
+from urllib.parse import urlparse
 
 class Blockchain(object):
     def __init__(self):
@@ -9,6 +9,12 @@ class Blockchain(object):
         self.current_transactions = []
         self.chain = []
         self.vvv_new_block(previous_hash='Vronskiy', proof=16052002)
+        self.nodes = set()
+
+    def vvv_register_node(self, address):
+        parsed_url = urlparse(address)
+        self.nodes.add(parsed_url.netloc)
+
 
     def vvv_new_block(self, proof, previous_hash=None):
         block = {
@@ -60,4 +66,50 @@ class Blockchain(object):
         for bl in self.chain:
             print(bl)
 
+    def vvv_valid_chain(self, chain):
 
+        last_block = chain[0]
+        current_index = 1
+        while current_index < len(chain):
+            block = chain[current_index]
+        print(f'{last_block}')
+        print(f'{block}')
+        print("\n-----------\n")
+
+        if block['previous_hash'] != self.hash(last_block):
+
+            return False
+
+        if not self.valid_proof(last_block['proof'], block['proof']):
+
+            return False
+
+        last_block = block
+
+        current_index += 1
+        return True
+def resolve_conflicts(self):
+
+     neighbours = self.nodes
+     new_chain = None
+
+     # Шукаємо тільки ланцюги, довші за наші
+     max_length = len(self.chain)
+
+     # Захоплюємо і перевіряємо всі ланцюги з усіх вузлів мережі
+     for node in neighbours:
+         response = requests.get(f'http://{node}/chain')
+
+         if response.status_code == 200:
+             length = response.json()['length']
+             chain = response.json()['chain']
+        if length > max_length and self.valid_chain(chain):
+            max_length = length
+            new_chain = chain
+
+     # Замінюємо ланцюг, якщо знайдемо інший валідний і довший
+     if new_chain:
+        self.chain = new_chain
+        return True
+
+     return False
