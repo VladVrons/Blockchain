@@ -75,7 +75,7 @@ def vvv_balance():
     response = {'message': f'Total balance = {total}'}
     return jsonify(response), 201
 
-@app.route('/nodes/register', methods=['POST'])
+@app.route('/nodes/vvv_register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
 
@@ -84,7 +84,7 @@ def register_nodes():
         return "Error: Please supply a valid list of nodes", 400
 
     for node in nodes:
-        blockchain.register_node(node)
+        blockchain.vvv_register_node(node)
 
     response = {
         'message': 'New nodes have been added',
@@ -94,7 +94,7 @@ def register_nodes():
 
 
 
-@app.route('/nodes/resolve', methods=['GET'])
+@app.route('/nodes/vvv_resolve', methods=['GET'])
 def consensus():
     replaced = blockchain.resolve_conflicts()
 
